@@ -24,6 +24,7 @@ impl Program {
                 constant_pool.push(
                     match *byte {
                         PureTypeBytes::Pi32 => PureTypes::from_bytecode(&mut iter,PureTypes::Pi32(0)).expect("Expected i32! Invalid bytecode"),
+                        PureTypeBytes::PString => PureTypes::from_bytecode(&mut iter,PureTypes::PString(String::from(""))).expect("Expected String! Invalid bytecode"),
                         _ => panic!("Unknown type code: {}",byte)
                     }
                 );

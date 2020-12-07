@@ -7,6 +7,7 @@ pub trait PureType {
 #[derive(Debug,Clone)]
 pub enum PureTypes {
     Pi32(i32),
+    PString(String)
 }
 
 pub struct PureTypeBytes;
@@ -14,14 +15,22 @@ pub struct PureTypeBytes;
 #[allow(non_upper_case_globals)]
 impl PureTypeBytes {
     pub const Pi32: u8 = 0;
+    pub const PString: u8 = 1;
 }
 
 impl PureType for PureTypes {
     fn to_bytecode(&self) -> Vec<u8> {
+        use PureTypes::*;
         match self {
-            PureTypes::Pi32(val) => {
+            Pi32(val) => {
                 let mut vec = Vec::with_capacity(4);
                 vec.extend_from_slice(&val.to_be_bytes());
+                vec.push(0);
+                vec
+            },
+            PString(val) => {
+                let mut vec = Vec::with_capacity(val.len());
+                vec.extend_from_slice(&val.as_bytes());
                 vec
             }
         }
@@ -45,7 +54,18 @@ impl PureType for PureTypes {
                 }
                 Some(PureTypes::Pi32(i32::from_be_bytes(bytes)))
             },
-            _ => None
+            PureTypes::PString(_) => {
+                let mut vec = Vec::new();
+                while let Some((_,b)) = bytecode.next() {
+                    if *b != 0 {
+                        vec.push(*b);
+                    }
+                    else {
+                        break;
+                    }
+                }
+                Some(PureTypes::PString(String::from_utf8_lossy(&vec).to_string()))
+            }
         }
     }
 }

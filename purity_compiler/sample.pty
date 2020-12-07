@@ -1,0 +1,5 @@
+let main: fn() = fn() {
+    print("Hello world!");
+};
+
+main();
