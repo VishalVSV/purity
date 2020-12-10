@@ -54,6 +54,23 @@ impl<'a> Iterator for Lexer<'a> {
             '{' => Some(LBrace),
             '}' => Some(RBrace),
             '=' => Some(Equals),
+            '+' => Some(Plus),
+            '*' => Some(Star),
+            '/' => Some(Divide),
+            '-' => {
+                if let Some(next) = self.chars.next() {
+                    if next == '>' {
+                        Some(Arrow)
+                    }
+                    else {
+                        self.unused_char = Some(next);
+                        Some(Minus)
+                    }
+                }
+                else {
+                    Some(Minus)
+                }
+            },
             '"' => {
                 let mut string = String::new();
                 while let Some(c) = self.chars.next() {
@@ -105,7 +122,7 @@ impl<'a> Iterator for Lexer<'a> {
                     Some(I32(num.parse().unwrap()))
                 }
                 else {
-                    println!("Invalid char {}",c);
+                    println!("Invalid token!");
                     None
                 }
             }

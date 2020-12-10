@@ -9,6 +9,14 @@ pub enum PureToken {
     RBrace,
     Func,
     Equals,
+    Arrow,
+
+    Plus,
+    Minus,
+    Star,
+    Divide,
+    
+
     Ident(String),
     StringLiteral(String),
     I32(i32)

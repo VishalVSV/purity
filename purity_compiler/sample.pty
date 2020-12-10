@@ -1,5 +1,5 @@
-let main: fn() = fn() {
-    print("Hello world!");
+let main = fn(s: string) -> void {
+    print(s);
 };
 
-main();
+main("Hello World!");
