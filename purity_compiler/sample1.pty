@@ -1,0 +1,5 @@
+let main: void fn(string) = fn(s: string) -> void {
+    print(s);
+};
+
+main("Hello World!");
